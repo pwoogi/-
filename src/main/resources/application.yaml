@@ -1,5 +1,5 @@
 override:
-  value: 'from local test check'
+  value: 'from local final check'
 
 debug: false
 management:
