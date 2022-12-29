@@ -7,11 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    @Value("${override.value}")
-    private String value;
-
     @GetMapping("/test")
     public String test(){
-        return "test 성공 " + value;
+        return "test 성공";
     }
 }
