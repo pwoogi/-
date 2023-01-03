@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+# Yaml파일 env설정 공부필요
 
 env:
   S3_BUCKET_NAME: s3-pwoogi
