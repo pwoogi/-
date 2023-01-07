@@ -1,5 +1,6 @@
 package com.dashboard.projectboard.model.entity;
 
+import com.dashboard.projectboard.model.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
@@ -10,14 +11,15 @@ import java.sql.Timestamp;
 import java.time.Instant;
 
 @Entity
-@Table
+@Table(name = "\"user\"")
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATED user SET deleted_at = NOW() where id=?")
+@SQLDelete(sql = "UPDATED \"user\" SET deleted_at = NOW() where id=?")
 @Where(clause = "deleted_at is NULL")
 public class UserEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "user_name")
@@ -25,6 +27,10 @@ public class UserEntity {
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private UserRole role = UserRole.USER;
 
     @Column(name = "registered_at")
     private Timestamp registeredAt;
@@ -45,6 +51,14 @@ public class UserEntity {
     void updatedAt(){
         this.updatedAt = Timestamp.from(Instant.now());
 
+    }
+
+    public static UserEntity of(String userName, String password){
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUserName(userName);
+        userEntity.setPassword(password);
+
+        return userEntity;
     }
 
 }

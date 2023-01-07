@@ -1,6 +1,9 @@
 package com.dashboard.projectboard.controller;
 
 import com.dashboard.projectboard.controller.request.UserJoinRequest;
+import com.dashboard.projectboard.controller.response.Response;
+import com.dashboard.projectboard.controller.response.UserJoinResponse;
+import com.dashboard.projectboard.model.User;
 import com.dashboard.projectboard.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,10 +20,10 @@ public class UserController {
 
     //Todo: implement
     @PostMapping("/join")
-    public void join(@RequestBody UserJoinRequest request){
+    public Response<UserJoinResponse> join(@RequestBody UserJoinRequest request){
 
-        userService.join(request.getUserName(), request.getPassword());
-
+        User user = userService.join(request.getUserName(), request.getPassword());
+        return Response.success(UserJoinResponse.fromUser(user));
     }
 
 }

@@ -1,6 +1,7 @@
 package com.dashboard.projectboard.service;
 
 import com.dashboard.projectboard.exception.BoardException;
+import com.dashboard.projectboard.exception.ErrorCode;
 import com.dashboard.projectboard.model.User;
 import com.dashboard.projectboard.model.entity.UserEntity;
 import com.dashboard.projectboard.repository.UserEntityRepository;
@@ -20,13 +21,13 @@ public class UserService {
         //회원가입하려는 userName으로 회원가입된 user 확인
         userEntityRepository.findByUserName(userName)
                 .ifPresent(it ->{
-                    throw new BoardException();
+                    throw new BoardException(ErrorCode.DUPLICATED_USER_NAME, String.format("%s is duplicated", userName));
                 });
 
         //회원가입 진행 = user 등록
-        userEntityRepository.save(new UserEntity());
+        UserEntity userEntity = userEntityRepository.save(UserEntity.of(userName, password));
 
-        return new User();
+        return User.fromEntity(userEntity);
 
     }
 
