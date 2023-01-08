@@ -2,6 +2,7 @@ package com.dashboard.projectboard.controller;
 
 import com.dashboard.projectboard.controller.request.UserJoinRequest;
 import com.dashboard.projectboard.exception.BoardException;
+import com.dashboard.projectboard.exception.ErrorCode;
 import com.dashboard.projectboard.model.User;
 import com.dashboard.projectboard.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,7 +57,7 @@ public class UserControllerTest {
         String userName = "userName";
         String password = "password";
 
-        when(userService.join(userName, password)).thenThrow(new RuntimeException());
+        when(userService.join(userName, password)).thenThrow(new BoardException(ErrorCode.DUPLICATED_USER_NAME, ""));
 
 
         mockMvc.perform(post("/api/vi/users/join")
@@ -73,9 +74,7 @@ public class UserControllerTest {
         String userName = "userName";
         String password = "password";
 
-
-        //Todo: mocking
-        when(userService.login(userName, password)).thenThrow(new BoardException());
+        when(userService.login(userName, password)).thenThrow(new BoardException(ErrorCode.DUPLICATED_USER_NAME, ""));
 
 
         mockMvc.perform(post("/api/vi/users/login")
@@ -93,7 +92,7 @@ public class UserControllerTest {
 
 
         //Todo: mocking
-        when(userService.login(userName, password)).thenThrow(new BoardException());
+        when(userService.login(userName, password)).thenThrow(new BoardException(ErrorCode.DUPLICATED_USER_NAME, ""));
 
 
         mockMvc.perform(post("/api/vi/users/login")

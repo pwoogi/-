@@ -3,7 +3,9 @@ package com.dashboard.projectboard.controller.response;
 import com.dashboard.projectboard.model.User;
 import com.dashboard.projectboard.model.UserRole;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public class UserJoinResponse {
 

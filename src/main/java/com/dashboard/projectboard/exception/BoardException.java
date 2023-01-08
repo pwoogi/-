@@ -3,7 +3,9 @@ package com.dashboard.projectboard.exception;
 //Todo: implement
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public class BoardException extends RuntimeException{
 
