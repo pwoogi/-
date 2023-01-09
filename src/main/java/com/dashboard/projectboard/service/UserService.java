@@ -27,7 +27,8 @@ public class UserService {
         //회원가입 진행 = user 등록
         UserEntity userEntity = userEntityRepository.save(UserEntity.of(userName, password));
 
-        return User.fromEntity(userEntity);
+        throw new BoardException(ErrorCode.DUPLICATED_USER_NAME, String.format("%s is duplicated", userName));
+//        return User.fromEntity(userEntity);
 
     }
 
