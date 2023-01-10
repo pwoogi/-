@@ -8,6 +8,7 @@ import com.dashboard.projectboard.repository.UserEntityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -18,7 +19,7 @@ public class UserService {
     private final UserEntityRepository userEntityRepository;
     private final BCryptPasswordEncoder encoder;
 
-    //Todo: implement
+    @Transactional
     public User join(String userName, String password) {
         //회원가입하려는 userName으로 회원가입된 user 확인
         userEntityRepository.findByUserName(userName)
@@ -28,8 +29,9 @@ public class UserService {
 
         //회원가입 진행 = user 등록
         UserEntity userEntity = userEntityRepository.save(UserEntity.of(userName, encoder.encode(password)));
+        throw new RuntimeException();
 
-        return User.fromEntity(userEntity);
+//        return User.fromEntity(userEntity);
 
     }
 
