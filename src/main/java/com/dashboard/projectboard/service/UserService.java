@@ -6,6 +6,7 @@ import com.dashboard.projectboard.model.User;
 import com.dashboard.projectboard.model.entity.UserEntity;
 import com.dashboard.projectboard.repository.UserEntityRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,6 +16,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserEntityRepository userEntityRepository;
+    private final BCryptPasswordEncoder encoder;
 
     //Todo: implement
     public User join(String userName, String password) {
@@ -25,10 +27,9 @@ public class UserService {
                 });
 
         //회원가입 진행 = user 등록
-        UserEntity userEntity = userEntityRepository.save(UserEntity.of(userName, password));
+        UserEntity userEntity = userEntityRepository.save(UserEntity.of(userName, encoder.encode(password)));
 
-        throw new BoardException(ErrorCode.DUPLICATED_USER_NAME, String.format("%s is duplicated", userName));
-//        return User.fromEntity(userEntity);
+        return User.fromEntity(userEntity);
 
     }
 
