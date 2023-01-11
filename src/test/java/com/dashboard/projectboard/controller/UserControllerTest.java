@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.mock;
@@ -31,7 +32,7 @@ public class UserControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private UserService userService;
+    UserService userService;
 
     @Test
     public void 회원가입() throws Exception {
@@ -40,13 +41,11 @@ public class UserControllerTest {
         String password = "password";
 
 
-        //Todo: mocking
         when(userService.join(userName, password)).thenReturn(mock(User.class));
 
 
         mockMvc.perform(post("/api/vi/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
-                        //Todo: add request body
                         .content(objectMapper.writeValueAsBytes(new UserJoinRequest(userName, password)))
                 ).andDo(print())
                 .andExpect(status().isOk());
@@ -57,7 +56,7 @@ public class UserControllerTest {
         String userName = "userName";
         String password = "password";
 
-        when(userService.join(userName, password)).thenThrow(new BoardException(ErrorCode.DUPLICATED_USER_NAME, ""));
+        when(userService.join(userName, password)).thenThrow(new BoardException(ErrorCode.DUPLICATED_USER_NAME));
 
 
         mockMvc.perform(post("/api/vi/users/join")
@@ -74,7 +73,7 @@ public class UserControllerTest {
         String userName = "userName";
         String password = "password";
 
-        when(userService.login(userName, password)).thenThrow(new BoardException(ErrorCode.DUPLICATED_USER_NAME, ""));
+        when(userService.login(userName, password)).thenThrow(new BoardException(ErrorCode.USER_NOT_FOUND));
 
 
         mockMvc.perform(post("/api/vi/users/login")
@@ -90,14 +89,11 @@ public class UserControllerTest {
         String userName = "userName";
         String password = "password";
 
-
-        //Todo: mocking
-        when(userService.login(userName, password)).thenThrow(new BoardException(ErrorCode.DUPLICATED_USER_NAME, ""));
+        when(userService.login(userName, password)).thenThrow(new BoardException(ErrorCode.INVALID_PASSWORD));
 
 
         mockMvc.perform(post("/api/vi/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        //Todo: add request body
                         .content(objectMapper.writeValueAsBytes(new UserJoinRequest(userName, password)))
                 ).andDo(print())
                 .andExpect(status().isUnauthorized());
