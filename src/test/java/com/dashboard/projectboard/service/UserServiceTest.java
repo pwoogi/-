@@ -1,6 +1,7 @@
 package com.dashboard.projectboard.service;
 
 import com.dashboard.projectboard.exception.BoardException;
+import com.dashboard.projectboard.exception.ErrorCode;
 import com.dashboard.projectboard.fixture.UserEntityFixture;
 import com.dashboard.projectboard.model.entity.UserEntity;
 import com.dashboard.projectboard.repository.UserEntityRepository;
@@ -38,7 +39,7 @@ public class UserServiceTest {
         // mocking
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.empty());
         when(encoder.encode(password)).thenReturn("encrypt_password");
-        when(userEntityRepository.save(any())).thenReturn(Optional.of(UserEntityFixture.get(userName, password)));
+        when(userEntityRepository.save(any())).thenReturn(UserEntityFixture.get(userName, password));
 
         Assertions.assertDoesNotThrow(() -> userService.join(userName, password));
 
@@ -58,7 +59,8 @@ public class UserServiceTest {
         when(encoder.encode(password)).thenReturn("encrypt_password");
         when(userEntityRepository.save(any())).thenReturn(Optional.of(fixture));
 
-        Assertions.assertThrows(BoardException.class, () -> userService.join(userName, password));
+        BoardException e = Assertions.assertThrows(BoardException.class, () -> userService.join(userName, password));
+        Assertions.assertEquals(ErrorCode.DUPLICATED_USER_NAME, e.getErrorCode());
 
     }
 
@@ -73,6 +75,7 @@ public class UserServiceTest {
 
         // mocking
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.of(fixture));
+        when(encoder.matches(password, fixture.getPassword())).thenReturn(true);
 
         Assertions.assertDoesNotThrow(() -> userService.login(userName, password));
 
@@ -87,7 +90,8 @@ public class UserServiceTest {
         // mocking
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(BoardException.class, () -> userService.login(userName, password));
+        BoardException e = Assertions.assertThrows(BoardException.class, () -> userService.login(userName, password));
+        Assertions.assertEquals(ErrorCode.USER_NOT_FOUND, e.getErrorCode());
 
     }
 
@@ -103,7 +107,8 @@ public class UserServiceTest {
         // mocking
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.of(fixture));
 
-        Assertions.assertThrows(BoardException.class, () -> userService.login(userName, wrongPassword));
+        BoardException e = Assertions.assertThrows(BoardException.class, () -> userService.login(userName, wrongPassword));
+        Assertions.assertEquals(ErrorCode.INVALID_PASSWORD, e.getErrorCode());
 
     }
 }

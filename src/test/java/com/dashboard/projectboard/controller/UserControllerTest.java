@@ -32,7 +32,7 @@ public class UserControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    UserService userService;
+    private UserService userService;
 
     @Test
     public void 회원가입() throws Exception {
@@ -44,7 +44,7 @@ public class UserControllerTest {
         when(userService.join(userName, password)).thenReturn(mock(User.class));
 
 
-        mockMvc.perform(post("/api/vi/users/join")
+        mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(new UserJoinRequest(userName, password)))
                 ).andDo(print())
@@ -59,9 +59,8 @@ public class UserControllerTest {
         when(userService.join(userName, password)).thenThrow(new BoardException(ErrorCode.DUPLICATED_USER_NAME));
 
 
-        mockMvc.perform(post("/api/vi/users/join")
+        mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
-                        //Todo: add request body
                         .content(objectMapper.writeValueAsBytes(new UserJoinRequest(userName, password)))
                 ).andDo(print())
                 .andExpect(status().isConflict());
@@ -76,9 +75,8 @@ public class UserControllerTest {
         when(userService.login(userName, password)).thenThrow(new BoardException(ErrorCode.USER_NOT_FOUND));
 
 
-        mockMvc.perform(post("/api/vi/users/login")
+        mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        //Todo: add request body
                         .content(objectMapper.writeValueAsBytes(new UserJoinRequest(userName, password)))
                 ).andDo(print())
                 .andExpect(status().isNotFound());
@@ -92,7 +90,7 @@ public class UserControllerTest {
         when(userService.login(userName, password)).thenThrow(new BoardException(ErrorCode.INVALID_PASSWORD));
 
 
-        mockMvc.perform(post("/api/vi/users/login")
+        mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(new UserJoinRequest(userName, password)))
                 ).andDo(print())
@@ -110,9 +108,8 @@ public class UserControllerTest {
         when(userService.login(userName, password)).thenReturn("test token");
 
 
-        mockMvc.perform(post("/api/vi/users/login")
+        mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        //Todo: add request body
                         .content(objectMapper.writeValueAsBytes(new UserJoinRequest(userName, password)))
                 ).andDo(print())
                 .andExpect(status().isOk());
