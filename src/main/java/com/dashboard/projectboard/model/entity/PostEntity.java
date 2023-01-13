@@ -55,12 +55,15 @@ public class PostEntity {
 
     }
 
-    public static UserEntity of(String userName, String password){
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUserName(userName);
-        userEntity.setPassword(password);
+    public static PostEntity of(String title, String body, UserEntity userEntity){
+        PostEntity postEntity = new PostEntity();
+        postEntity.setTitle(title);
+        postEntity.setBody(body);
+        postEntity.setUser(userEntity);
 
-        return userEntity;
+        return postEntity;
     }
+
+
 
 }

@@ -24,7 +24,7 @@ public class PostService {
         UserEntity userEntity = userEntityRepository.findByUserName(userName).orElseThrow(()-> new BoardException(ErrorCode.USER_NOT_FOUND, String.format("% is not found", userName)));
 
         //post save
-        postEntityRepository.save(new PostEntity());
+        postEntityRepository.save(PostEntity.of(title, body, userEntity));
         //return
 
     }
