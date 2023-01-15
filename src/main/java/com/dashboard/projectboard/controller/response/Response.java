@@ -15,6 +15,11 @@ public class Response<T> {
 
     }
 
+    public static Response<Void> success() {
+        return new Response<Void>("SUCCESS", null);
+
+    }
+
     public static <T> Response<T> success(T result) {
         return new Response<>("SUCCESS", result);
 

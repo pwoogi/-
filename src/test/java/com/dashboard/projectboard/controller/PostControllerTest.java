@@ -1,12 +1,15 @@
 package com.dashboard.projectboard.controller;
 
+import com.dashboard.projectboard.controller.request.PostCreateRequest;
 import com.dashboard.projectboard.controller.request.UserJoinRequest;
 import com.dashboard.projectboard.model.User;
+import com.dashboard.projectboard.service.PostService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,6 +30,9 @@ public class PostControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @MockBean
+    private PostService postService;
+
     @Test
     @WithAnonymousUser
     void 포스트작성() throws Exception{
@@ -36,7 +42,7 @@ public class PostControllerTest {
 
         mockMvc.perform(post("/api/v1/posts")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new UserJoinRequest(title, body)))
+                        .content(objectMapper.writeValueAsBytes(new PostCreateRequest(title, body)))
                 ).andDo(print())
                 .andExpect(status().isOk());
 
@@ -51,7 +57,7 @@ public class PostControllerTest {
 
         mockMvc.perform(post("/api/v1/posts")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new UserJoinRequest(title, body)))
+                        .content(objectMapper.writeValueAsBytes(new PostCreateRequest(title, body)))
                 ).andDo(print())
                 .andExpect(status().isOk());
 

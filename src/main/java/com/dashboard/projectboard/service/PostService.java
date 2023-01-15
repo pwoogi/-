@@ -20,12 +20,9 @@ public class PostService {
     @Transactional
     public void create(String title, String body, String userName){
 
-        //user find
-        UserEntity userEntity = userEntityRepository.findByUserName(userName).orElseThrow(()-> new BoardException(ErrorCode.USER_NOT_FOUND, String.format("% is not found", userName)));
-
-        //post save
+        UserEntity userEntity = userEntityRepository.findByUserName(userName).orElseThrow(()->
+                new BoardException(ErrorCode.USER_NOT_FOUND, String.format("%s is not found", userName)));
         postEntityRepository.save(PostEntity.of(title, body, userEntity));
-        //return
 
     }
 
