@@ -11,11 +11,6 @@ import java.util.Date;
 
 public class JwtTokenUtils {
 
-    public static boolean isValid(String token){
-
-
-    }
-
     public static String getUserName(String token, String key){
         return extractClaim(token, key).get("userName", String.class);
 

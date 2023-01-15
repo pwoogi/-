@@ -1,6 +1,7 @@
 package com.dashboard.projectboard.configuration;
 
 import com.dashboard.projectboard.configuration.filter.JwtTokenFilter;
+import com.dashboard.projectboard.exception.CustomAuthenticationEntryPoint;
 import com.dashboard.projectboard.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,9 +32,10 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(new JwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtTokenFilter(key, userService), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling()
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
         ;
-        //Todo
-        // exceptionHandling, authenticationEntryPoint 추가 예정
+
     }
 }
