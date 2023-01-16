@@ -26,4 +26,15 @@ public class PostService {
 
     }
 
+    @Transactional
+    public void modify(String title, String body, String userName, Integer postId){
+        UserEntity userEntity = userEntityRepository.findByUserName(userName).orElseThrow(()->
+                new BoardException(ErrorCode.USER_NOT_FOUND, String.format("%s is not found", userName)));
+
+        //post exist
+
+        //post permission
+
+    }
+
 }
