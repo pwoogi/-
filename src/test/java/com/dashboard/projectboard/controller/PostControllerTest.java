@@ -4,6 +4,8 @@ import com.dashboard.projectboard.controller.request.PostCreateRequest;
 import com.dashboard.projectboard.controller.request.PostModifyRequest;
 import com.dashboard.projectboard.exception.BoardException;
 import com.dashboard.projectboard.exception.ErrorCode;
+import com.dashboard.projectboard.fixture.PostEntityFixture;
+import com.dashboard.projectboard.model.Post;
 import com.dashboard.projectboard.service.PostService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -71,6 +73,9 @@ public class PostControllerTest {
         String title = "title";
         String body = "body";
 
+        when(postService.modify(eq(title), eq(body), any(), any()))
+                .thenReturn(Post.fromEntity(PostEntityFixture.get("userName", 1, 1)));
+
         mockMvc.perform(put("/api/v1/posts/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(new PostModifyRequest(title, body)))
@@ -90,7 +95,7 @@ public class PostControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(new PostModifyRequest(title, body)))
                 ).andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isUnauthorized());
 
     }
 

@@ -2,6 +2,7 @@ package com.dashboard.projectboard.service;
 
 import com.dashboard.projectboard.exception.BoardException;
 import com.dashboard.projectboard.exception.ErrorCode;
+import com.dashboard.projectboard.model.Post;
 import com.dashboard.projectboard.model.entity.PostEntity;
 import com.dashboard.projectboard.model.entity.UserEntity;
 import com.dashboard.projectboard.repository.PostEntityRepository;
@@ -27,14 +28,23 @@ public class PostService {
     }
 
     @Transactional
-    public void modify(String title, String body, String userName, Integer postId){
+    public Post modify(String title, String body, String userName, Integer postId){
         UserEntity userEntity = userEntityRepository.findByUserName(userName).orElseThrow(()->
                 new BoardException(ErrorCode.USER_NOT_FOUND, String.format("%s is not found", userName)));
 
         //post exist
+        PostEntity postEntity = postEntityRepository.findById(postId).orElseThrow(() ->
+                new BoardException(ErrorCode.POST_NOT_FOUND, String.format("%s is not found", postId)));
 
         //post permission
+        if (postEntity.getUser() != userEntity){
+            throw new BoardException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", userName, postId));
+        }
 
+        postEntity.setTitle(title);
+        postEntity.setBody(body);
+
+        return Post.fromEntity(postEntityRepository.saveAndFlush(postEntity));
     }
 
 }
