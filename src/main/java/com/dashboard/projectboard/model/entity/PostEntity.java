@@ -1,6 +1,5 @@
 package com.dashboard.projectboard.model.entity;
 
-import com.dashboard.projectboard.model.UserRole;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,10 +11,10 @@ import java.sql.Timestamp;
 import java.time.Instant;
 
 @Entity
-@Table(name = "\"post\"")
+@Table(name = "post")
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE \"post\" SET deleted_at = NOW() where id=?")
+@SQLDelete(sql = "UPDATE post SET deleted_at = NOW() WHERE id=?")
 @Where(clause = "deleted_at is NULL")
 @NoArgsConstructor
 public class PostEntity {
